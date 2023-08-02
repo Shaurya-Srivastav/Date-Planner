@@ -6,14 +6,14 @@ from yelpapi import YelpAPI
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 # Load model directly
-tokenizer = AutoTokenizer.from_pretrained("mosaicml/mpt-7b-instruct", trust_remote_code=True)
-model = AutoModelForCausalLM.from_pretrained("mosaicml/mpt-7b-instruct", trust_remote_code=True)
+tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-neo-2.7B")
+model = AutoModelForCausalLM.from_pretrained("EleutherAI/gpt-neo-2.7B")
 
 YELP_API_KEY = "tMKtgU5qUHGDubCTAg-x03kX10IsgoP4mraQfmu3kG0Mx4N6r6fqWvIpcqtXPOR1jPtgUJQ8T-7XPxFlAzPqBRd3-O5qBvougUjHpzrY2C4XM4MtZgW3cnOqj7_JZHYx"
 
-def generate_food_description(city, cuisine):
-    input_text = f"Food spots in {city} with {cuisine} cuisine:"
-    input_ids = tokenizer.encode(input_text, return_tensors="pt")
+def generate_food_description(restaurant_name, city, cuisine):
+    prompt = f"Restaurant {restaurant_name} in {city} with {cuisine} cuisine:"
+    input_ids = tokenizer.encode(prompt, return_tensors="pt")
     with torch.no_grad():
         output = model.generate(input_ids, max_length=150, num_return_sequences=1, pad_token_id=tokenizer.eos_token_id)
     description = tokenizer.decode(output[0], skip_special_tokens=True)
@@ -33,7 +33,6 @@ def get_food_spots(city, cuisine):
         return []
 
     yelp_api = YelpAPI(YELP_API_KEY)
-
     params = {
         "term": cuisine,
         "latitude": city_latitude,
@@ -41,12 +40,7 @@ def get_food_spots(city, cuisine):
         "limit": 5,  # Fetch 5 food spots
         "sort_by": "best_match",
     }
-    
-    headers = {
-        "Authorization": f"Bearer {YELP_API_KEY}"
-    }
-
-    response = yelp_api.search_query(**params, headers=headers)
+    response = yelp_api.search_query(**params)
     food_spots = [spot["name"] for spot in response.get("businesses", [])]
     return food_spots
 
@@ -87,7 +81,7 @@ def main():
 
             st.subheader("Food Spots:")
             for i, spot in enumerate(food_spots, 1):
-                description = generate_food_description(city, cuisine)
+                description = generate_food_description(spot, city, cuisine)
                 st.write(f"{i}. **{spot}**: {description}")
 
         except Exception as e:

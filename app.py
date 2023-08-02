@@ -11,7 +11,7 @@ YELP_API_KEY = "Yp-dywOnJffkh3kCInHEkK917AFfYXFC9WI0un8iTrvEBdURl679tn9rWRmu-TE7
 
 def get_coordinates(city):
     geolocator = Nominatim(user_agent="date-planner-app/1.0")
-    location = geolocator.geocode(city, addressdetails=True)
+    location = geolocator.geocode(city, addressdetails=True, timeout=10)
     if location:
         return location.latitude, location.longitude
     return None

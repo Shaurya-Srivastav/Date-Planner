@@ -41,12 +41,9 @@ def choose_random_food_spots(food_spots):
     return random_food_spots
 
 def get_photos(business_id):
-    yelp_url = f"https://api.yelp.com/v3/businesses/{business_id}/photos"
-    headers = {
-        "Authorization": f"Bearer {YELP_API_KEY}"
-    }
-    response = requests.get(yelp_url, headers=headers)
-    photos = response.json().get("photos", [])
+    yelp_api = YelpAPI(YELP_API_KEY)
+    response = yelp_api.business_query(id=business_id)
+    photos = response.get("photos", [])
     return photos
 
 def main():

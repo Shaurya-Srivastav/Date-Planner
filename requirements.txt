@@ -1,0 +1,6 @@
+streamlit
+torch
+geopy
+yelpapi
+transformers
+folium

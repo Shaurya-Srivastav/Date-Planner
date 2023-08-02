@@ -33,6 +33,7 @@ def get_food_spots(city, cuisine):
         return []
 
     yelp_api = YelpAPI(YELP_API_KEY)
+
     params = {
         "term": cuisine,
         "latitude": city_latitude,
@@ -40,7 +41,12 @@ def get_food_spots(city, cuisine):
         "limit": 5,  # Fetch 5 food spots
         "sort_by": "best_match",
     }
-    response = yelp_api.search_query(**params)
+    
+    headers = {
+        "Authorization": f"Bearer {YELP_API_KEY}"
+    }
+
+    response = yelp_api.search_query(**params, headers=headers)
     food_spots = [spot["name"] for spot in response.get("businesses", [])]
     return food_spots
 

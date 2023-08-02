@@ -7,7 +7,7 @@ from PIL import Image
 import requests
 from io import BytesIO
 
-YELP_API_KEY = "tMKtgU5qUHGDubCTAg-x03kX10IsgoP4mraQfmu3kG0Mx4N6r6fqWvIpcqtXPOR1jPtgUJQ8T-7XPxFlAzPqBRd3-O5qBvougUjHpzrY2C4XM4MtZgW3cnOqj7_JZHYx"
+YELP_API_KEY = "Yp-dywOnJffkh3kCInHEkK917AFfYXFC9WI0un8iTrvEBdURl679tn9rWRmu-TE7hHiBQ4uHwtfjbUomQ-i5ErHL9ehXbZux7FRQyg4WjHuiJRe9m18HwCMYR8PKZHYx"
 
 def get_coordinates(city):
     geolocator = Nominatim(user_agent="date-planner-app/1.0")

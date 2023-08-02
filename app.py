@@ -1,23 +1,9 @@
 import streamlit as st
-import torch
 import random
 from geopy.geocoders import Nominatim
 from yelpapi import YelpAPI
-from transformers import AutoTokenizer, AutoModelForCausalLM
-
-# Load model directly
-tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-neo-2.7B")
-model = AutoModelForCausalLM.from_pretrained("EleutherAI/gpt-neo-2.7B")
 
 YELP_API_KEY = "tMKtgU5qUHGDubCTAg-x03kX10IsgoP4mraQfmu3kG0Mx4N6r6fqWvIpcqtXPOR1jPtgUJQ8T-7XPxFlAzPqBRd3-O5qBvougUjHpzrY2C4XM4MtZgW3cnOqj7_JZHYx"
-
-def generate_food_description(restaurant_name, city, cuisine):
-    prompt = f"Restaurant {restaurant_name} in {city} with {cuisine} cuisine:"
-    input_ids = tokenizer.encode(prompt, return_tensors="pt")
-    with torch.no_grad():
-        output = model.generate(input_ids, max_length=150, num_return_sequences=1, pad_token_id=tokenizer.eos_token_id)
-    description = tokenizer.decode(output[0], skip_special_tokens=True)
-    return description.strip()
 
 def get_coordinates(city):
     geolocator = Nominatim(user_agent="date-planner-app/1.0")
@@ -41,7 +27,7 @@ def get_food_spots(city, cuisine):
         "sort_by": "best_match",
     }
     response = yelp_api.search_query(**params)
-    food_spots = [spot["name"] for spot in response.get("businesses", [])]
+    food_spots = [(spot["name"], spot["url"], spot["review_count"], spot["rating"]) for spot in response.get("businesses", [])]
     return food_spots
 
 def main():
@@ -80,9 +66,11 @@ def main():
                 return
 
             st.subheader("Food Spots:")
-            for i, spot in enumerate(food_spots, 1):
-                description = generate_food_description(spot, city, cuisine)
-                st.write(f"{i}. **{spot}**: {description}")
+            for i, (spot, url, review_count, rating) in enumerate(food_spots, 1):
+                st.markdown(f"## **[{spot}]({url})**")
+                st.write(f"Rating: {rating:.1f} / 5.0")
+                st.write(f"Reviews: {review_count}")
+                st.write("")
 
         except Exception as e:
             st.error("Error occurred: {}".format(str(e)))

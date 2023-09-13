@@ -2,21 +2,35 @@
 
 This Python application, "Date Planner for Couples," is designed to help couples plan a romantic food date in their chosen city. It utilizes various libraries and APIs to provide restaurant suggestions based on city and cuisine preferences. This document provides a detailed technical overview of the application.
 
-## Prerequisites
+## Features
 
-Before running the application, ensure that you have the required Python libraries installed. You can install these dependencies using pip:
+### 1. Location-Based Date Planning
 
-```bash
-pip install streamlit geopy yelpapi pillow requests
-```
+- **City Selection**: Users can input the name of their preferred city where they want to plan their date.
 
-### Additional Requirements
+### 2. Cuisine Selection
 
-You'll also need a Yelp API key to access restaurant data. Replace the `YELP_API_KEY` in the code with your own API key.
+- **Cuisine Dropdown**: Users can choose from a variety of cuisines, including Italian, Mexican, Indian, Chinese, Japanese, Thai, Greek, American, French, or even opt for a "Random" cuisine.
 
-## Application Structure
+### 3. Randomized Date Plans
 
-The application is built using the Streamlit framework and comprises several functions and modules:
+- **Randomization**: The application uses a random seed generated from the current time to ensure each date plan is unique and spontaneous.
+
+- **Restaurant Suggestions**: Based on the selected city and cuisine, the application fetches restaurant data from Yelp and suggests five random food spots for the date.
+
+### 4. Detailed Restaurant Information
+
+- **Restaurant Details**: For each restaurant suggestion, the application provides the following information:
+    - Restaurant Name
+    - Rating (out of 5.0)
+    - Number of Reviews
+    - Popular Dish Photos (up to 3 photos)
+
+### 5. Error Handling
+
+- **Error Handling**: The application includes robust error handling to gracefully handle exceptions, providing users with informative error messages if any issues occur during execution.
+
+## How the Application Works
 
 1. **Import Statements**: The application begins with importing the necessary libraries and modules. These include Streamlit, random, time, geopy, yelpapi, Pillow (PIL), and requests.
 
@@ -48,11 +62,7 @@ This will launch the Streamlit app in your default web browser. You can then int
 
 ## Customization
 
-You can customize the application by modifying the available cuisines or changing the number of selected random food spots. Additionally, you can enhance the user interface or add more features as per your requirements.
-
-## Error Handling
-
-The application includes error handling to capture and display any exceptions that may occur during execution, ensuring a smooth user experience.
+You can customize the application by modifying the available cuisines, changing the number of selected random food spots, or enhancing the user interface to include additional features. The code is modular and well-structured, making it easy to extend and customize as per your requirements.
 
 ## Note
 
